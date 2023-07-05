@@ -9,7 +9,7 @@ namespace LegacyFighter.Dietary.Models.NewProducts
         public string Desc { get; private set; }
         public string LongDesc { get; private set; }
         public int? Counter { get; private set; }
-
+ 
         public OldProduct(decimal? price, string desc, string longDesc, int? counter)
         {
             Price = price;
