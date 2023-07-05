@@ -6,32 +6,22 @@ namespace LegacyFighter.Dietary.Models.NewProducts
     {
         public Guid SerialNumber { get; private set; } = Guid.NewGuid();
         public decimal? Price { get; private set; }
-        public string Desc { get; private set; }
-        public string LongDesc { get; private set; }
-        public int? Counter { get; private set; }
- 
+        private OldProductDescription OldProductDescription { get; set; }
+        private readonly OldProductCounter _counter;
+        public int? Counter => _counter.Counter;
+
         public OldProduct(decimal? price, string desc, string longDesc, int? counter)
         {
             Price = price;
-            Desc = desc;
-            LongDesc = longDesc;
-            Counter = counter;
+            OldProductDescription = new OldProductDescription(desc, longDesc);
+            _counter = new OldProductCounter(counter);
         }
 
         public void DecrementCounter()
         {
             if (Price is not null && Price > 0)
             {
-                if (Counter == null)
-                {
-                    throw new InvalidOperationException("null counter");
-                }
-
-                Counter = Counter - 1;
-                if (Counter < 0)
-                {
-                    throw new InvalidOperationException("Negative counter");
-                }
+                _counter.DecrementCounter();
             }
             else
             {
@@ -41,20 +31,9 @@ namespace LegacyFighter.Dietary.Models.NewProducts
 
         public void IncrementCounter()
         {
-            if (Price is not null && Price > 0)
+            if (Price > 0)
             {
-                if (Counter == null)
-                {
-                    throw new InvalidOperationException("null counter");
-                }
-
-                if (Counter + 1 < 0)
-                {
-                    throw new InvalidOperationException("Negative counter");
-                }
-
-                Counter = Counter + 1;
-
+                _counter.IncrementCounter();
             }
             else
             {
@@ -82,23 +61,12 @@ namespace LegacyFighter.Dietary.Models.NewProducts
 
         public void ReplaceCharFromDesc(string charToReplace, string replaceWith)
         {
-            if (string.IsNullOrWhiteSpace(LongDesc) || string.IsNullOrWhiteSpace(Desc))
-            {
-                throw new InvalidOperationException("null or empty desc");
-            }
-
-            LongDesc = LongDesc.Replace(charToReplace, replaceWith);
-            Desc = Desc.Replace(charToReplace, replaceWith);
+            OldProductDescription.ReplaceCharFromDesc(charToReplace, replaceWith);
         }
 
         public string FormatDesc()
         {
-            if (string.IsNullOrWhiteSpace(LongDesc) || string.IsNullOrWhiteSpace(Desc))
-            {
-                return "";
-            }
-
-            return Desc + " *** " + LongDesc;
+            return OldProductDescription.FormatDesc();
         }
     }
 }
