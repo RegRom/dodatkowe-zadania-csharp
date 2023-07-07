@@ -2,42 +2,45 @@
 
 namespace LegacyFighter.Dietary.Models.NewProducts
 {
-    public class OldProductCounter
+    public class Counter
     {
-        public int? Counter { get; private set; }
+        public int? Value { get; private set; }
+        
+        public bool IsPositive => Value is > 0;
 
-        public OldProductCounter(int? counter)
+        public Counter(int? value)
         {
-            Counter = counter;
+            Value = value;
         }
         
-        public void IncrementCounter()
+        public Counter IncrementCounter()
         {
-            if (Counter == null)
+            if (Value == null)
             {
                 throw new InvalidOperationException("null counter");
             }
 
-            if (Counter + 1 < 0)
+            if (Value + 1 < 0)
             {
                 throw new InvalidOperationException("Negative counter");
             }
 
-            Counter = Counter + 1;
+            return new Counter(Value + 1);
         }
 
-        public void DecrementCounter()
+        public Counter DecrementCounter()
         {
-            if (Counter == null)
+            if (Value == null)
             {
                 throw new InvalidOperationException("null counter");
             }
-
-            Counter = Counter - 1;
-            if (Counter < 0)
+            
+            if (Value <= 0)
             {
                 throw new InvalidOperationException("Negative counter");
             }
+            
+            return new Counter(Value - 1);
         }
     }
 }

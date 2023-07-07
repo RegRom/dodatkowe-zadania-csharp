@@ -2,12 +2,12 @@
 
 namespace LegacyFighter.Dietary.Models.NewProducts
 {
-    public class OldProductDescription
+    public class Description
     {
         public string Desc { get; private set; }
         public string LongDesc { get; private set; }
 
-        public OldProductDescription(string desc, string longDesc)
+        public Description(string desc, string longDesc)
         {
             Desc = desc;
             LongDesc = longDesc;

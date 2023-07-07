@@ -4,24 +4,27 @@ namespace LegacyFighter.Dietary.Models.NewProducts
 {
     public class OldProduct
     {
+        private Counter _counter;
+        private Price _price;
+
         public Guid SerialNumber { get; private set; } = Guid.NewGuid();
-        public decimal? Price { get; private set; }
-        private OldProductDescription OldProductDescription { get; set; }
-        private readonly OldProductCounter _counter;
-        public int? Counter => _counter.Counter;
+        public Description Description { get; }
+        
+        public int? Counter => _counter.Value;
+        public decimal? Price => _price.Value;
 
         public OldProduct(decimal? price, string desc, string longDesc, int? counter)
         {
-            Price = price;
-            OldProductDescription = new OldProductDescription(desc, longDesc);
-            _counter = new OldProductCounter(counter);
+            _price = new Price(price);
+            Description = new Description(desc, longDesc);
+            _counter = new Counter(counter);
         }
 
         public void DecrementCounter()
         {
-            if (Price is not null && Price > 0)
+            if (_price.IsValid)
             {
-                _counter.DecrementCounter();
+                _counter = _counter.DecrementCounter();
             }
             else
             {
@@ -31,9 +34,9 @@ namespace LegacyFighter.Dietary.Models.NewProducts
 
         public void IncrementCounter()
         {
-            if (Price > 0)
+            if (_price.IsValid)
             {
-                _counter.IncrementCounter();
+                _counter = _counter.IncrementCounter();
             }
             else
             {
@@ -43,30 +46,25 @@ namespace LegacyFighter.Dietary.Models.NewProducts
 
         public void ChangePriceTo(decimal? newPrice)
         {
-            if (Counter == null)
+            if (_counter == null)
             {
                 throw new InvalidOperationException("null counter");
             }
 
-            if (Counter > 0)
+            if (_counter.IsPositive)
             {
-                if (newPrice == null)
-                {
-                    throw new InvalidOperationException("new price null");
-                }
-
-                Price = newPrice;
+                _price = NewProducts.Price.ChangePriceTo(newPrice);
             }
         }
 
         public void ReplaceCharFromDesc(string charToReplace, string replaceWith)
         {
-            OldProductDescription.ReplaceCharFromDesc(charToReplace, replaceWith);
+            Description.ReplaceCharFromDesc(charToReplace, replaceWith);
         }
 
         public string FormatDesc()
         {
-            return OldProductDescription.FormatDesc();
+            return Description.FormatDesc();
         }
     }
 }
