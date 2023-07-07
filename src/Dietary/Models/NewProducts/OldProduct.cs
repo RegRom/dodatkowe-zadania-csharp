@@ -6,9 +6,9 @@ namespace LegacyFighter.Dietary.Models.NewProducts
     {
         private Counter _counter;
         private Price _price;
-
+        private readonly Description _description;
+        
         public Guid SerialNumber { get; private set; } = Guid.NewGuid();
-        public Description Description { get; }
         
         public int? Counter => _counter.Value;
         public decimal? Price => _price.Value;
@@ -16,7 +16,7 @@ namespace LegacyFighter.Dietary.Models.NewProducts
         public OldProduct(decimal? price, string desc, string longDesc, int? counter)
         {
             _price = new Price(price);
-            Description = new Description(desc, longDesc);
+            _description = new Description(desc, longDesc);
             _counter = new Counter(counter);
         }
 
@@ -59,12 +59,12 @@ namespace LegacyFighter.Dietary.Models.NewProducts
 
         public void ReplaceCharFromDesc(string charToReplace, string replaceWith)
         {
-            Description.ReplaceCharFromDesc(charToReplace, replaceWith);
+            _description.ReplaceCharFromDesc(charToReplace, replaceWith);
         }
 
         public string FormatDesc()
         {
-            return Description.FormatDesc();
+            return _description.FormatDesc();
         }
     }
 }
