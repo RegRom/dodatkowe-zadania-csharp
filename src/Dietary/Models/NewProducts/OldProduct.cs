@@ -46,7 +46,7 @@ namespace LegacyFighter.Dietary.Models.NewProducts
 
         public void ChangePriceTo(decimal? newPrice)
         {
-            if (_counter == null)
+            if (Counter == null)
             {
                 throw new InvalidOperationException("null counter");
             }
