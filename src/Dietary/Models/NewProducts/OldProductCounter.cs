@@ -2,7 +2,7 @@
 
 namespace LegacyFighter.Dietary.Models.NewProducts
 {
-    public class OldProductCounter : ICounter
+    public class OldProductCounter
     {
         public int? Counter { get; private set; }
 
